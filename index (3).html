@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Watch — Cybersecurity Trends &amp; Course Library</title>
+<meta name="description" content="Ongoing cybersecurity trends, explained plainly, plus the course books that go deeper.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101820;
+    --surface:#16212C;
+    --surface-2:#1D2A38;
+    --border:#2A3B4A;
+    --text:#E7EEF3;
+    --text-muted:#93A7B8;
+    --accent:#FF7A45;
+    --accent-soft:#3A2A22;
+    --accent-2:#4FD1C5;
+    --accent-2-soft:#16302E;
+    --danger:#FF6B6B;
+    --radius:3px;
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  :root:not([data-theme="light"]){ }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F5F2EC;
+      --surface:#FFFFFF;
+      --surface-2:#EFEAE1;
+      --border:#D9D2C4;
+      --text:#181510;
+      --text-muted:#6B6355;
+      --accent-soft:#FCE3D6;
+      --accent-2-soft:#DBF3EF;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F5F2EC;
+    --surface:#FFFFFF;
+    --surface-2:#EFEAE1;
+    --border:#D9D2C4;
+    --text:#181510;
+    --text-muted:#6B6355;
+    --accent-soft:#FCE3D6;
+    --accent-2-soft:#DBF3EF;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px;}
+  .grid-overlay{
+    position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black, transparent 70%);
+    -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%, black, transparent 70%);
+  }
+
+  /* ---- Nav ---- */
+  header.site{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:1.3rem;font-weight:600;text-decoration:none;color:var(--text);}
+  .brand-mark{
+    width:30px;height:30px;border-radius:50%;
+    background:conic-gradient(from 210deg, var(--accent), var(--accent-2), var(--accent));
+    display:flex;align-items:center;justify-content:center;
+    font-size:.85rem;color:#101820;font-weight:700;font-family:var(--mono);
+  }
+  nav.links{display:flex;gap:28px;align-items:center;}
+  nav.links a{text-decoration:none;color:var(--text-muted);font-size:.95rem;transition:color .15s;}
+  nav.links a:hover{color:var(--text);}
+  .theme-btn{
+    border:1px solid var(--border);background:var(--surface);color:var(--text-muted);
+    border-radius:var(--radius);padding:7px 10px;cursor:pointer;font-size:.85rem;font-family:var(--sans);
+  }
+  .theme-btn:hover{color:var(--text);}
+  .nav-toggle{display:none;background:none;border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:8px 10px;cursor:pointer;}
+
+  /* ---- Hero ---- */
+  .hero{position:relative;padding:76px 0 56px;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:56px;align-items:start;position:relative;z-index:1;}
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--accent);font-family:var(--mono);font-size:.8rem;
+    margin-bottom:18px;
+  }
+  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  h1.hero-title{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    line-height:1.06;margin:0 0 22px;letter-spacing:-0.01em;
+  }
+  .hero-title em{font-style:italic;color:var(--accent-2);}
+  .hero-sub{color:var(--text-muted);font-size:1.08rem;max-width:52ch;margin:0 0 32px;}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 22px;border-radius:var(--radius);
+    font-weight:600;font-size:.95rem;text-decoration:none;
+    border:1px solid transparent;cursor:pointer;font-family:var(--sans);
+    transition:transform .12s ease, background .15s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--accent);color:#181009;}
+  .btn-primary:hover{background:#FF8C5F;}
+  .btn-ghost{background:transparent;color:var(--text);border-color:var(--border);}
+  .btn-ghost:hover{border-color:var(--text-muted);}
+
+  .signal-panel{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px 22px 8px;position:relative;z-index:1;
+  }
+  .signal-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+  .signal-head h3{margin:0;font-size:.78rem;text-transform:none;color:var(--text-muted);font-weight:500;letter-spacing:.02em;}
+  .signal-live{font-family:var(--mono);font-size:.72rem;color:var(--accent-2);display:flex;align-items:center;gap:6px;}
+  .signal-live .pulse{width:6px;height:6px;border-radius:50%;background:var(--accent-2);animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+  .signal-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-top:1px solid var(--border);}
+  .signal-row:first-of-type{border-top:none;}
+  .signal-label{font-size:.85rem;color:var(--text-muted);}
+  .signal-value{font-family:var(--mono);font-size:1.15rem;font-weight:500;}
+  .signal-note{font-size:.72rem;color:var(--text-muted);padding:10px 0 14px;border-top:1px solid var(--border);margin-top:2px;}
+
+  /* ---- Section shell ---- */
+  section{padding:72px 0;position:relative;z-index:1;}
+  .section-head{max-width:62ch;margin-bottom:44px;}
+  .section-head .kicker{margin-bottom:14px;}
+  h2.section-title{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.35rem);font-weight:600;margin:0 0 12px;letter-spacing:-0.01em;}
+  .section-head p{color:var(--text-muted);margin:0;font-size:1.02rem;}
+  .divider{border:none;border-top:1px solid var(--border);margin:0;}
+
+  /* ---- Trends / blog ---- */
+  .post{
+    display:grid;grid-template-columns:220px 1fr;gap:36px;
+    padding:36px 0;border-top:1px solid var(--border);
+  }
+  .post:last-child{border-bottom:1px solid var(--border);}
+  .post-meta{padding-top:2px;}
+  .tag{
+    display:inline-block;font-size:.74rem;font-family:var(--mono);
+    padding:4px 9px;border-radius:2px;margin-bottom:12px;
+  }
+  .tag-ai{background:var(--accent-soft);color:var(--accent);}
+  .tag-identity{background:var(--accent-2-soft);color:var(--accent-2);}
+  .tag-compliance{background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border);}
+  .tag-cloud{background:var(--accent-2-soft);color:var(--accent-2);}
+  .tag-quantum{background:var(--accent-soft);color:var(--accent);}
+  .tag-human{background:var(--surface-2);color:var(--text-muted);border:1px solid var(--border);}
+  .post-meta .read-time{display:block;color:var(--text-muted);font-size:.82rem;}
+  .post-meta .post-date{display:block;color:var(--text-muted);font-size:.82rem;margin-top:4px;}
+  h3.post-title{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin:0 0 12px;line-height:1.25;}
+  .post-body p{color:var(--text-muted);margin:0 0 14px;max-width:68ch;}
+  .post-body p:last-of-type{margin-bottom:0;}
+  .post-actions{display:flex;gap:16px;align-items:center;margin-top:18px;}
+  .share{display:flex;gap:8px;}
+  .share a{
+    width:32px;height:32px;border:1px solid var(--border);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:.8rem;
+    text-decoration:none;color:var(--text-muted);transition:.15s;
+  }
+  .share a:hover{color:var(--text);border-color:var(--text-muted);}
+  .like-btn{
+    display:inline-flex;align-items:center;gap:7px;background:none;border:1px solid var(--border);
+    border-radius:20px;padding:6px 13px;color:var(--text-muted);cursor:pointer;font-size:.85rem;font-family:var(--sans);
+  }
+  .like-btn.liked{color:var(--accent);border-color:var(--accent);}
+  .comments-toggle{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.85rem;text-decoration:underline;padding:0;font-family:var(--sans);}
+  .comments-toggle:hover{color:var(--text);}
+  .comments-box{display:none;margin-top:20px;border-top:1px dashed var(--border);padding-top:18px;}
+  .comments-box.open{display:block;}
+  .comment-list{margin:0 0 14px;padding:0;list-style:none;}
+  .comment-list li{padding:10px 0;border-bottom:1px solid var(--border);font-size:.9rem;}
+  .comment-list li:last-child{border-bottom:none;}
+  .comment-list .c-name{font-weight:600;margin-right:6px;}
+  .comment-list .c-time{color:var(--text-muted);font-size:.78rem;}
+  .comment-empty{color:var(--text-muted);font-size:.85rem;font-style:italic;}
+  .comment-form{display:flex;flex-direction:column;gap:8px;max-width:480px;}
+  .comment-form input, .comment-form textarea{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:10px 12px;color:var(--text);font-family:var(--sans);font-size:.9rem;
+  }
+  .comment-form textarea{resize:vertical;min-height:64px;}
+  .comment-form button{align-self:flex-start;}
+
+  /* ---- Books ---- */
+  .books-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .book-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .book-cover{
+    aspect-ratio:3/4;background:linear-gradient(155deg, var(--surface-2), var(--bg));
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:flex-end;padding:18px;position:relative;overflow:hidden;
+  }
+  .book-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .book-cover h4{position:relative;z-index:1;background:color-mix(in srgb, var(--bg) 88%, transparent);padding:8px;margin:0 -6px -6px;}
+  .book-cover .spine{
+    position:absolute;left:0;top:0;bottom:0;width:8px;
+    background:var(--accent);
+  }
+  .book-cover.cover-2 .spine{background:var(--accent-2);}
+  .book-cover.cover-3 .spine{background:var(--text-muted);}
+  .book-cover h4{
+    font-family:var(--serif);color:var(--text);font-size:1.15rem;
+    line-height:1.2;font-weight:600;
+  }
+  .book-info{padding:20px;display:flex;flex-direction:column;flex:1;gap:10px;}
+  .book-info .book-author{color:var(--text-muted);font-size:.85rem;margin:0;}
+  .book-info .book-desc{color:var(--text-muted);font-size:.88rem;margin:0;flex:1;}
+  .book-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+  .price{font-family:var(--mono);font-size:1.05rem;font-weight:500;}
+  .buy-btn{
+    display:inline-block;padding:9px 16px;border-radius:var(--radius);
+    background:var(--accent);color:#181009;text-decoration:none;font-weight:600;font-size:.85rem;
+  }
+  .buy-btn:hover{background:#FF8C5F;}
+  .book-format{color:var(--text-muted);font-size:.75rem;font-family:var(--mono);}
+
+  /* ---- Newsletter ---- */
+  .newsletter{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:44px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;
+  }
+  .newsletter h2{font-family:var(--serif);font-size:1.7rem;margin:0 0 10px;font-weight:600;}
+  .newsletter p{color:var(--text-muted);margin:0;max-width:44ch;}
+  .nl-form{display:flex;gap:10px;flex-wrap:wrap;}
+  .nl-form input{
+    flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:13px 14px;color:var(--text);font-family:var(--sans);font-size:.95rem;
+  }
+  .nl-msg{margin-top:12px;font-size:.85rem;color:var(--accent-2);min-height:1.2em;}
+
+  /* ---- Stats strip ---- */
+  .stats-strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .stat{padding:30px 24px;border-left:1px solid var(--border);}
+  .stat:first-child{border-left:none;}
+  .stat .num{font-family:var(--serif);font-size:2.1rem;font-weight:600;color:var(--accent-2);}
+  .stat .label{color:var(--text-muted);font-size:.85rem;margin-top:4px;}
+
+  /* ---- Footer ---- */
+  footer{padding:48px 0 32px;border-top:1px solid var(--border);}
+  .footer-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:28px;}
+  .footer-brand{font-family:var(--serif);font-size:1.15rem;font-weight:600;}
+  .footer-cols{display:flex;gap:56px;flex-wrap:wrap;}
+  .footer-col h5{font-size:.8rem;color:var(--text-muted);margin:0 0 12px;font-weight:500;}
+  .footer-col a{display:block;color:var(--text);text-decoration:none;font-size:.9rem;margin-bottom:8px;opacity:.85;}
+  .footer-col a:hover{opacity:1;text-decoration:underline;}
+  .footer-bottom{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:var(--text-muted);font-size:.8rem;}
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .post{grid-template-columns:1fr;gap:14px;}
+    .books-grid{grid-template-columns:1fr;}
+    .newsletter{grid-template-columns:1fr;padding:30px;}
+    .stats-strip{grid-template-columns:1fr 1fr;}
+    .stat:nth-child(3){border-left:none;}
+    nav.links{position:fixed;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);flex-direction:column;align-items:flex-start;padding:18px 28px;gap:16px;display:none;}
+    nav.links.open{display:flex;}
+    .nav-toggle{display:block;}
+  }
+  @media (min-width:861px) and (max-width:1060px){
+    .books-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .signal-live .pulse{animation:none;}
+  }
+  :focus-visible{outline:2px solid var(--accent-2);outline-offset:2px;}
+</style>
+</head>
+<body>
+<div class="grid-overlay" aria-hidden="true"></div>
+
+<header class="site">
+  <div class="nav wrap">
+    <a href="#top" class="brand"><span class="brand-mark">SW</span>Signal Watch</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <nav class="links" id="navLinks">
+      <a href="#trends">Trends</a>
+      <a href="#books">Course Books</a>
+      <a href="#newsletter">Briefing</a>
+      <a href="#about">About</a>
+      <button class="theme-btn" id="themeToggle" type="button">Dark / Light</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker"><span class="dot"></span>UPDATED SEPTEMBER 2026</div>
+        <h1 class="hero-title">Cybersecurity doesn't wait for you to <em>catch up.</em></h1>
+        <p class="hero-sub">Signal Watch tracks the trends actually reshaping defense right now — AI-driven attacks, identity-first security, quantum risk — explained without the jargon. Then we point you to the course books that go deeper.</p>
+        <div class="hero-cta">
+          <a href="#trends" class="btn btn-primary">Read the trends</a>
+          <a href="#books" class="btn btn-ghost">Browse the books</a>
+        </div>
+      </div>
+      <div class="signal-panel">
+        <div class="signal-head">
+          <h3>This week's signal</h3>
+          <div class="signal-live"><span class="pulse"></span>ILLUSTRATIVE</div>
+        </div>
+        <div class="signal-row">
+          <span class="signal-label">Phishing attempts flagged</span>
+          <span class="signal-value" id="stat1">—</span>
+        </div>
+        <div class="signal-row">
+          <span class="signal-label">Orgs piloting agentic AI defense</span>
+          <span class="signal-value" id="stat2">—</span>
+        </div>
+        <div class="signal-row">
+          <span class="signal-label">Avg. days to detect a breach</span>
+          <span class="signal-value" id="stat3">—</span>
+        </div>
+        <div class="signal-row">
+          <span class="signal-label">Identity-related incidents</span>
+          <span class="signal-value" id="stat4">—</span>
+        </div>
+        <p class="signal-note">Rounded, illustrative figures for context — not a live feed. See sources in each article below.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="divider"></div>
+
+  <!-- STATS STRIP -->
+  <div class="wrap">
+    <div class="stats-strip">
+      <div class="stat"><div class="num">6</div><div class="label">trends tracked this cycle</div></div>
+      <div class="stat"><div class="num">3</div><div class="label">course books available</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">plain-language, no fluff</div></div>
+      <div class="stat"><div class="num">KES</div><div class="label">local pricing &amp; M-Pesa friendly</div></div>
+    </div>
+  </div>
+
+  <!-- TRENDS -->
+  <section id="trends">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker"><span class="dot"></span>ON THE RADAR</div>
+        <h2 class="section-title">Ongoing cybersecurity trends</h2>
+        <p>Six shifts security teams and students should actually understand right now — what's driving each one, and what it means in practice.</p>
+      </div>
+
+      <!-- Post 1 -->
+      <article class="post" id="post-ai-soc">
+        <div class="post-meta">
+          <span class="tag tag-ai">AI &amp; Automation</span>
+          <span class="read-time">4 min read</span>
+          <span class="post-date">Trend #1</span>
+        </div>
+        <div>
+          <h3 class="post-title">AI-powered security operations are becoming the baseline</h3>
+          <div class="post-body">
+            <p>Security teams are drowning in alerts. The average enterprise generates more telemetry in a day than any human team can triage, so AI is moving from "nice to have" to the default way security operations centers keep up — correlating events across endpoints, cloud, and identity systems to surface what actually matters.</p>
+            <p>The practical shift: analysts spend less time chasing false positives and more time on judgment calls AI can't make — deciding whether an anomaly is a real incident, and what response fits the business context. Teams that resist this shift risk alert fatigue burning out their staff while real threats slip through the noise.</p>
+            <p>For students: this is why "SOC analyst" roles increasingly expect comfort working alongside automated detection tools, not just manual log review.</p>
+          </div>
+          <div class="post-actions">
+            <button class="like-btn" data-post="ai-soc">♡ <span class="like-count">0</span></button>
+            <button class="comments-toggle" data-target="c-ai-soc">Add a comment</button>
+            <div class="share">
+              <a href="https://twitter.com/intent/tweet?text=AI-powered%20security%20operations%20are%20becoming%20the%20baseline&url=" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" rel="noopener" aria-label="Share on LinkedIn">in</a>
+              <a href="mailto:?subject=Worth%20a%20read%3A%20AI-powered%20security%20operations&body=Thought%20you%27d%20find%20this%20useful." aria-label="Share by email">✉</a>
+            </div>
+          </div>
+          <div class="comments-box" id="c-ai-soc" data-post="ai-soc">
+            <ul class="comment-list"></ul>
+            <p class="comment-empty" hidden>No comments yet — be the first.</p>
+            <form class="comment-form" onsubmit="return false;">
+              <input type="text" placeholder="Your name" class="c-name-input" required>
+              <textarea placeholder="Add your thoughts…" class="c-text-input" required></textarea>
+              <button type="submit" class="btn btn-ghost c-submit">Post comment</button>
+            </form>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 2 -->
+      <article class="post" id="post-agentic">
+        <div class="post-meta">
+          <span class="tag tag-ai">AI &amp; Automation</span>
+          <span class="read-time">5 min read</span>
+          <span class="post-date">Trend #2</span>
+        </div>
+        <div>
+          <h3 class="post-title">Agentic AI is now a tool for both sides</h3>
+          <div class="post-body">
+            <p>The same autonomous AI agents that can triage tickets and patch systems can also be pointed at reconnaissance, phishing at scale, and probing for weaknesses — with far less manual effort than before. Attackers no longer need deep skill to run a convincing, adaptive campaign; they need access to the right model and a goal.</p>
+            <p>Defenders are responding in kind: agentic tools that can independently investigate an alert, pull context from multiple systems, and recommend or even take a contained action, all before a human joins the loop. The trend to watch isn't "AI vs. AI" as a slogan — it's how much autonomy organizations are willing to hand these agents, and how they audit what the agents actually did.</p>
+            <p>The open question for 2026: governance. Most security teams are further ahead on adopting agentic tools than they are on documenting who's accountable when one makes a bad call.</p>
+          </div>
+          <div class="post-actions">
+            <button class="like-btn" data-post="agentic">♡ <span class="like-count">0</span></button>
+            <button class="comments-toggle" data-target="c-agentic">Add a comment</button>
+            <div class="share">
+              <a href="https://twitter.com/intent/tweet?text=Agentic%20AI%20is%20now%20a%20tool%20for%20both%20sides&url=" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" rel="noopener" aria-label="Share on LinkedIn">in</a>
+              <a href="mailto:?subject=Worth%20a%20read%3A%20Agentic%20AI&body=Thought%20you%27d%20find%20this%20useful." aria-label="Share by email">✉</a>
+            </div>
+          </div>
+          <div class="comments-box" id="c-agentic" data-post="agentic">
+            <ul class="comment-list"></ul>
+            <p class="comment-empty" hidden>No comments yet — be the first.</p>
+            <form class="comment-form" onsubmit="return false;">
+              <input type="text" placeholder="Your name" class="c-name-input" required>
+              <textarea placeholder="Add your thoughts…" class="c-text-input" required></textarea>
+              <button type="submit" class="btn btn-ghost c-submit">Post comment</button>
+            </form>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 3 -->
+      <article class="post" id="post-identity">
+        <div class="post-meta">
+          <span class="tag tag-identity">Identity &amp; Zero Trust</span>
+          <span class="read-time">4 min read</span>
+          <span class="post-date">Trend #3</span>
+        </div>
+        <div>
+          <h3 class="post-title">Identity has replaced the network perimeter</h3>
+          <div class="post-body">
+            <p>Hybrid work, cloud apps, and contractor access killed the old idea of a trusted internal network. Today, "who is this, and should they be doing this right now" is the actual perimeter — which is why identity-related incidents (stolen credentials, session hijacking, over-permissioned accounts) keep showing up as a leading cause of breaches.</p>
+            <p>Zero trust — verify every request, grant the least access needed, assume breach — has moved from buzzword to baseline architecture for organizations serious about resilience. In practice that means multi-factor authentication everywhere, short-lived access instead of standing permissions, and continuous verification rather than a one-time login check.</p>
+            <p>For anyone starting out in the field, identity and access management is one of the most in-demand, durable specializations — it's not going away with the next tooling cycle.</p>
+          </div>
+          <div class="post-actions">
+            <button class="like-btn" data-post="identity">♡ <span class="like-count">0</span></button>
+            <button class="comments-toggle" data-target="c-identity">Add a comment</button>
+            <div class="share">
+              <a href="https://twitter.com/intent/tweet?text=Identity%20has%20replaced%20the%20network%20perimeter&url=" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" rel="noopener" aria-label="Share on LinkedIn">in</a>
+              <a href="mailto:?subject=Worth%20a%20read%3A%20Identity%20and%20Zero%20Trust&body=Thought%20you%27d%20find%20this%20useful." aria-label="Share by email">✉</a>
+            </div>
+          </div>
+          <div class="comments-box" id="c-identity" data-post="identity">
+            <ul class="comment-list"></ul>
+            <p class="comment-empty" hidden>No comments yet — be the first.</p>
+            <form class="comment-form" onsubmit="return false;">
+              <input type="text" placeholder="Your name" class="c-name-input" required>
+              <textarea placeholder="Add your thoughts…" class="c-text-input" required></textarea>
+              <button type="submit" class="btn btn-ghost c-submit">Post comment</button>
+            </form>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 4 -->
+      <article class="post" id="post-quantum">
+        <div class="post-meta">
+          <span class="tag tag-quantum">Emerging Risk</span>
+          <span class="read-time">3 min read</span>
+          <span class="post-date">Trend #4</span>
+        </div>
+        <div>
+          <h3 class="post-title">Quantum computing's threat is closer than "someday"</h3>
+          <div class="post-body">
+            <p>Practical quantum computers capable of breaking today's standard encryption aren't here yet — but the risk isn't only about when they arrive. "Harvest now, decrypt later" attacks are already happening: adversaries capture encrypted data today, banking on being able to unlock it once quantum decryption becomes viable.</p>
+            <p>That's pushed post-quantum cryptography from an academic topic into something organizations handling long-lived sensitive data — health records, financial systems, government archives — are starting to plan migrations for now, not later. Standards bodies have published quantum-resistant algorithms; the harder part is the years-long process of actually replacing what's embedded in existing systems.</p>
+          </div>
+          <div class="post-actions">
+            <button class="like-btn" data-post="quantum">♡ <span class="like-count">0</span></button>
+            <button class="comments-toggle" data-target="c-quantum">Add a comment</button>
+            <div class="share">
+              <a href="https://twitter.com/intent/tweet?text=Quantum%20computing%27s%20threat%20is%20closer%20than%20someday&url=" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" rel="noopener" aria-label="Share on LinkedIn">in</a>
+              <a href="mailto:?subject=Worth%20a%20read%3A%20Quantum%20risk&body=Thought%20you%27d%20find%20this%20useful." aria-label="Share by email">✉</a>
+            </div>
+          </div>
+          <div class="comments-box" id="c-quantum" data-post="quantum">
+            <ul class="comment-list"></ul>
+            <p class="comment-empty" hidden>No comments yet — be the first.</p>
+            <form class="comment-form" onsubmit="return false;">
+              <input type="text" placeholder="Your name" class="c-name-input" required>
+              <textarea placeholder="Add your thoughts…" class="c-text-input" required></textarea>
+              <button type="submit" class="btn btn-ghost c-submit">Post comment</button>
+            </form>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 5 -->
+      <article class="post" id="post-compliance">
+        <div class="post-meta">
+          <span class="tag tag-compliance">Regulation</span>
+          <span class="read-time">3 min read</span>
+          <span class="post-date">Trend #5</span>
+        </div>
+        <div>
+          <h3 class="post-title">Regulation is catching up — and it's reshaping priorities</h3>
+          <div class="post-body">
+            <p>Data protection and breach-disclosure rules keep tightening across regions, and data sovereignty — where data physically lives and who can access it — is becoming as important to regulators as how it's encrypted. For organizations operating across borders, that means compliance is no longer a once-a-year audit exercise; it's shaping day-to-day architecture decisions.</p>
+            <p>Security and legal teams are working more closely together than before, because a well-defended system that quietly violates a data residency rule is still a serious risk. Expect this coupling to deepen through 2026 as more jurisdictions introduce their own frameworks.</p>
+          </div>
+          <div class="post-actions">
+            <button class="like-btn" data-post="compliance">♡ <span class="like-count">0</span></button>
+            <button class="comments-toggle" data-target="c-compliance">Add a comment</button>
+            <div class="share">
+              <a href="https://twitter.com/intent/tweet?text=Regulation%20is%20catching%20up%20in%20cybersecurity&url=" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" rel="noopener" aria-label="Share on LinkedIn">in</a>
+              <a href="mailto:?subject=Worth%20a%20read%3A%20Regulation%20and%20data%20sovereignty&body=Thought%20you%27d%20find%20this%20useful." aria-label="Share by email">✉</a>
+            </div>
+          </div>
+          <div class="comments-box" id="c-compliance" data-post="compliance">
+            <ul class="comment-list"></ul>
+            <p class="comment-empty" hidden>No comments yet — be the first.</p>
+            <form class="comment-form" onsubmit="return false;">
+              <input type="text" placeholder="Your name" class="c-name-input" required>
+              <textarea placeholder="Add your thoughts…" class="c-text-input" required></textarea>
+              <button type="submit" class="btn btn-ghost c-submit">Post comment</button>
+            </form>
+          </div>
+        </div>
+      </article>
+
+      <!-- Post 6 -->
+      <article class="post" id="post-cloud">
+        <div class="post-meta">
+          <span class="tag tag-cloud">Cloud &amp; Exposure</span>
+          <span class="read-time">4 min read</span>
+          <span class="post-date">Trend #6</span>
+        </div>
+        <div>
+          <h3 class="post-title">Continuous exposure management is replacing point-in-time scans</h3>
+          <div class="post-body">
+            <p>Annual penetration tests and quarterly scans made sense when infrastructure changed slowly. It doesn't anymore — cloud resources spin up and down daily, and a misconfiguration can appear and become exploitable within hours. That's driving a shift toward continuous exposure management: constantly mapping what's internet-facing, how it could be attacked, and which gaps actually matter most right now.</p>
+            <p>The key change in mindset is prioritization. Security teams can't fix everything, so the useful question isn't "what's vulnerable" — it's "what's vulnerable, reachable, and valuable enough that an attacker would actually go for it." That's the practical, less flashy skill this trend rewards.</p>
+          </div>
+          <div class="post-actions">
+            <button class="like-btn" data-post="cloud">♡ <span class="like-count">0</span></button>
+            <button class="comments-toggle" data-target="c-cloud">Add a comment</button>
+            <div class="share">
+              <a href="https://twitter.com/intent/tweet?text=Continuous%20exposure%20management%20is%20replacing%20point-in-time%20scans&url=" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" rel="noopener" aria-label="Share on LinkedIn">in</a>
+              <a href="mailto:?subject=Worth%20a%20read%3A%20Continuous%20exposure%20management&body=Thought%20you%27d%20find%20this%20useful." aria-label="Share by email">✉</a>
+            </div>
+          </div>
+          <div class="comments-box" id="c-cloud" data-post="cloud">
+            <ul class="comment-list"></ul>
+            <p class="comment-empty" hidden>No comments yet — be the first.</p>
+            <form class="comment-form" onsubmit="return false;">
+              <input type="text" placeholder="Your name" class="c-name-input" required>
+              <textarea placeholder="Add your thoughts…" class="c-text-input" required></textarea>
+              <button type="submit" class="btn btn-ghost c-submit">Post comment</button>
+            </form>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- BOOKS -->
+  <section id="books" style="background:var(--surface-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="kicker"><span class="dot"></span>COURSE LIBRARY</div>
+        <h2 class="section-title">Books for this course</h2>
+        <p>Explore the latest books from Bruz529. Each title links directly to its Payhip product page.</p>
+      </div>
+      <div class="books-grid">
+
+        <div class="book-card">
+          <div class="book-cover"><img src="https://payhip.com/cdn-cgi/image/format=auto,width=120/https://pe56d.s3.amazonaws.com/o_1il67ub2t88t1slb1t7u1b2a1jpsr.jpg" alt="System Hacking Practicals cover"><div class="spine"></div><h4>System Hacking Practicals</h4></div>
+          <div class="book-info">
+            <p class="book-desc">Practical study material for understanding system hacking techniques.</p>
+            <div class="book-footer">
+              <span class="book-format">Payhip</span>
+              <a class="buy-btn" href="https://payhip.com/b/3RF1f" target="_blank" rel="noopener">View book</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover cover-2"><img src="https://payhip.com/cdn-cgi/image/format=auto,width=120/https://pe56d.s3.amazonaws.com/o_1il62rmft11s36ns1fk0lc01up71b.jpg" alt="Introduction to Ethical Hacking cover"><div class="spine"></div><h4>Introduction to Ethical Hacking</h4></div>
+          <div class="book-info">
+            <p class="book-desc">An accessible introduction to ethical hacking concepts and practice.</p>
+            <div class="book-footer">
+              <span class="book-format">Payhip</span>
+              <a class="buy-btn" href="https://payhip.com/b/Hln6o" target="_blank" rel="noopener">View book</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover cover-3"><img src="https://payhip.com/cdn-cgi/image/format=auto,width=120/https://pe56d.s3.amazonaws.com/o_1ikui5oid6a91gvo1rmvmoffp11b.jpg" alt="Mastering Quarterly Taxes for Freelancers cover"><div class="spine"></div><h4>Mastering Quarterly Taxes for Freelancers</h4></div>
+          <div class="book-info">
+            <p class="book-desc">A practical tax guide for freelancers managing quarterly payments.</p>
+            <div class="book-footer">
+              <span class="book-format">Payhip</span>
+              <a class="buy-btn" href="https://payhip.com/b/ilr1s" target="_blank" rel="noopener">View book</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-card">
+          <div class="book-cover"><img src="https://payhip.com/cdn-cgi/image/format=auto,width=120/https://pe56d.s3.amazonaws.com/o_1ikt2cdhk1r2l1sar2mp1fgblml10.jpg" alt="Mastering Self-Employment Taxes cover"><div class="spine"></div><h4>Mastering Self-Employment Taxes: A Freelancer's Guide</h4></div>
+          <div class="book-info">
+            <p class="book-desc">A focused guide to navigating self-employment taxes as a freelancer.</p>
+            <div class="book-footer">
+              <span class="book-format">Payhip</span>
+              <a class="buy-btn" href="https://payhip.com/b/37M68" target="_blank" rel="noopener">View book</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="newsletter">
+    <div class="wrap">
+      <div class="newsletter">
+        <div>
+          <h2>Get the next trend before it's everywhere</h2>
+          <p>A short, occasional note when something genuinely worth knowing shows up — no spam, unsubscribe anytime.</p>
+        </div>
+        <div>
+          <form class="nl-form" id="nlForm">
+            <input type="email" id="nlEmail" placeholder="you@example.com" required>
+            <button type="submit" class="btn btn-primary">Join the briefing</button>
+          </form>
+          <div class="nl-msg" id="nlMsg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap" style="max-width:70ch;">
+      <div class="kicker"><span class="dot"></span>ABOUT THIS SITE</div>
+      <h2 class="section-title">Why Signal Watch exists</h2>
+      <p style="color:var(--text-muted);">This site pairs ongoing cybersecurity trend coverage with the course books that expand on each topic — built so students and working professionals can read the short version here, then go deeper with the books when a trend actually matters to their work.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Signal Watch</div>
+        <p style="color:var(--text-muted);font-size:.85rem;max-width:32ch;margin-top:8px;">Cybersecurity trends and course books, kept current.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Site</h5>
+          <a href="#trends">Trends</a>
+          <a href="#books">Books</a>
+          <a href="#newsletter">Briefing</a>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <!-- EDIT: replace with your real contact email and socials -->
+          <a href="mailto:hello@yourdomain.co.ke">hello@yourdomain.co.ke</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">X / Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Signal Watch. Built for the course.</span>
+      <span id="visitCount"></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---- Theme toggle ----
+  var themeBtn = document.getElementById('themeToggle');
+  var stored = localStorage.getItem('sw-theme');
+  if(stored){ document.documentElement.setAttribute('data-theme', stored); }
+  themeBtn.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme');
+    var isDarkNow = current ? current === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next = isDarkNow ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try{ localStorage.setItem('sw-theme', next); }catch(e){}
+  });
+
+  // ---- Mobile nav ----
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', function(){
+    var open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  // ---- Illustrative signal stats (static per load, gently randomized for feel) ----
+  function rnd(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+  var stats = {
+    stat1: rnd(48, 63) + 'k',
+    stat2: rnd(38, 52) + '%',
+    stat3: rnd(190, 240),
+    stat4: rnd(60, 74) + '%'
+  };
+  Object.keys(stats).forEach(function(id){
+    var el = document.getElementById(id);
+    if(el){ el.textContent = stats[id]; }
+  });
+
+  // ---- Likes (per-visitor, stored locally) ----
+  document.querySelectorAll('.like-btn').forEach(function(btn){
+    var key = 'sw-like-' + btn.dataset.post;
+    var countEl = btn.querySelector('.like-count');
+    var liked = false;
+    try{ liked = localStorage.getItem(key) === '1'; }catch(e){}
+    var baseCount = 4 + (btn.dataset.post.length % 9); // stable-looking starting count per post
+    function render(){
+      countEl.textContent = liked ? baseCount + 1 : baseCount;
+      btn.classList.toggle('liked', liked);
+      btn.firstChild.textContent = liked ? '♥ ' : '♡ ';
+    }
+    render();
+    btn.addEventListener('click', function(){
+      liked = !liked;
+      try{ localStorage.setItem(key, liked ? '1' : '0'); }catch(e){}
+      render();
+    });
+  });
+
+  // ---- Comments toggle ----
+  document.querySelectorAll('.comments-toggle').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var box = document.getElementById(btn.dataset.target);
+      box.classList.toggle('open');
+    });
+  });
+
+  // ---- Comments (stored locally per browser) ----
+  function loadComments(postKey){
+    try{
+      var raw = localStorage.getItem('sw-comments-' + postKey);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+  function saveComments(postKey, list){
+    try{ localStorage.setItem('sw-comments-' + postKey, JSON.stringify(list)); }catch(e){}
+  }
+  function renderComments(box){
+    var postKey = box.dataset.post;
+    var list = loadComments(postKey);
+    var ul = box.querySelector('.comment-list');
+    var empty = box.querySelector('.comment-empty');
+    ul.innerHTML = '';
+    if(list.length === 0){
+      empty.hidden = false;
+    } else {
+      empty.hidden = true;
+      list.forEach(function(c){
+        var li = document.createElement('li');
+        var safeName = document.createElement('span');
+        safeName.className = 'c-name';
+        safeName.textContent = c.name;
+        var safeText = document.createTextNode(c.text + '  ');
+        var time = document.createElement('span');
+        time.className = 'c-time';
+        time.textContent = c.time;
+        li.appendChild(safeName);
+        li.appendChild(safeText);
+        li.appendChild(time);
+        ul.appendChild(li);
+      });
+    }
+  }
+  document.querySelectorAll('.comments-box').forEach(function(box){
+    renderComments(box);
+    var form = box.querySelector('.comment-form');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var nameInput = form.querySelector('.c-name-input');
+      var textInput = form.querySelector('.c-text-input');
+      var name = nameInput.value.trim();
+      var text = textInput.value.trim();
+      if(!name || !text) return;
+      var postKey = box.dataset.post;
+      var list = loadComments(postKey);
+      list.push({ name: name, text: text, time: 'just now' });
+      saveComments(postKey, list);
+      renderComments(box);
+      nameInput.value = '';
+      textInput.value = '';
+    });
+  });
+
+  // ---- Newsletter (stored locally; replace with a real form action for production) ----
+  var nlForm = document.getElementById('nlForm');
+  var nlMsg = document.getElementById('nlMsg');
+  nlForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = document.getElementById('nlEmail').value.trim();
+    if(!email) return;
+    try{
+      var list = JSON.parse(localStorage.getItem('sw-subscribers') || '[]');
+      if(list.indexOf(email) === -1){ list.push(email); }
+      localStorage.setItem('sw-subscribers', JSON.stringify(list));
+    }catch(e){}
+    nlMsg.textContent = "You're on the list — thanks for joining.";
+    nlForm.reset();
+  });
+
+  // ---- Visit counter (per-browser, illustrative) ----
+  try{
+    var visits = parseInt(localStorage.getItem('sw-visits') || '0', 10) + 1;
+    localStorage.setItem('sw-visits', String(visits));
+    document.getElementById('visitCount').textContent = 'Visit #' + visits + ' on this device';
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
